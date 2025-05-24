@@ -1,6 +1,7 @@
 <p align="center">
-  <img src="public/fluenceo-banner.png" alt="Fluenceo Logo" width="120" />
-</p>
+  <img src="public/fluenceo-logo.svg" alt="Qr2code Logo" width="350">
+</p> 
+
 
 
 <p align="center">

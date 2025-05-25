@@ -7,6 +7,8 @@ import { UserPort} from "../domain/port/user.port";
 /* ---------- Adapters (infrastructure) ---------- */
 import { PrismaTaskRepository} from "../infrastructure/prisma/task/task.repository";
 import { PrismaUserRepository } from "../infrastructure/prisma/user/user.repository";
+// Bcrypeter
+import { BcryptHasherService} from "../infrastructure/crypto/bcrypt-hasher.service";
 
 /* ---------- Use-cases (application) ---------- */
 // TASK
@@ -25,6 +27,7 @@ import {ConfigModule} from "@nestjs/config";
 import {PrismaService} from "../../prisma/prisma.service";
 import { TaskController} from "../api/task/task.controller";
 import { UserController } from "../api/user/user.controller";
+import {PasswordHasherPort} from "../domain/port/password-hasher.port";
 
 @Module({
     imports: [ConfigModule.forRoot({ isGlobal: true })],
@@ -39,6 +42,7 @@ import { UserController } from "../api/user/user.controller";
         UpdateTaskUseCase,
         // User
         { provide: UserPort, useClass: PrismaUserRepository },
+        { provide: PasswordHasherPort, useClass: BcryptHasherService },
         CreateUserUseCase,
         UpdateUserUseCase,
         FindUserUseCase,

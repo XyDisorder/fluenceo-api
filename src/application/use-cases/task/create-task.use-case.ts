@@ -1,6 +1,6 @@
 import {Injectable} from "@nestjs/common";
-import {TaskPort } from "../../domain/port/task.port";
-import {CreatableTaskInput} from "../../domain/entities/task/task.type";
+import {TaskPort } from "../../../domain/port/task.port";
+import {CreatableTaskInput} from "../../../domain/entities/task/task.type";
 
 @Injectable()
 export class CreateTaskUseCase {

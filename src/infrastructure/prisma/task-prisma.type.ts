@@ -11,3 +11,13 @@ export type CreatePrismaTask = {
     modifiedAt: Date;
     dueDate: Date | null;
 };
+
+export type UpdatePrismaTask = {
+    title?: string;
+    description?: string;
+    priority?: number;
+    assignedTo?: string;
+    status?: TaskStatus;
+    dueDate?: Date;
+    modifiedAt: Date;
+}

@@ -52,7 +52,7 @@ shared/
 ## 📌 Example: Constant
 
 ```ts
-// shared/constants/task-status.constant.ts
+// shared/constants/entities-status.constant.ts
 export const TASK_STATUSES = ['todo', 'doing', 'done'] as const;
 export type TaskStatus = typeof TASK_STATUSES[number];
 ```

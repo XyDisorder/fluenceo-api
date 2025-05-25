@@ -26,7 +26,7 @@ application/
 │ └── sync-github-prs.usecase.ts
 │
 └── interfaces/
-└── task-repository.interface.ts # Contracts used by the use cases, implemented in infrastructure/
+└── task.port.ts # Contracts used by the use cases, implemented in infrastructure/
 └── github.service.interface.ts # Interfaces for external services
 ```
 
@@ -75,7 +75,7 @@ Use cases can be unit tested with mocked interfaces
 No external dependency is needed to validate business workflows
 
 ```ts 
-it('should create a task', async () => {
+it('should create a entities', async () => {
   const repo: TaskRepository = { save: jest.fn() };
   const useCase = new CreateTaskUseCase(repo);
   await useCase.execute({ title: 'Test' });

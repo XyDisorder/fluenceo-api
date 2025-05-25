@@ -87,7 +87,7 @@ Entities from the domain layer are consumed by application use-cases, and are pe
 You can test this logic without NestJS or a database:
 
 ```ts
-const task = new Task(uuid(), 'Demo task', 'todo', new Date());
+const task = new Task(uuid(), 'Demo entities', 'todo', new Date());
 task.markAsDone();
 expect(task.status).toBe('done');
 ```

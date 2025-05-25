@@ -1,7 +1,7 @@
 import {CreatableTaskInput, GetTaskOutput, UpdatableTask} from "../entities/task/task.type";
 import {Task} from "../entities/task/task.entity";
 
-export abstract class  TaskPort {
+export abstract class TaskPort {
     abstract create(task: CreatableTaskInput): Promise<void>;
     abstract findAll(): Promise<GetTaskOutput[]>;
     abstract deleteByUuid(uuid: Task['uuid']): Promise<void>;

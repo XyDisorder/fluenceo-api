@@ -1,4 +1,4 @@
-import {TaskStatus} from "../../domain/entities/task/task-status.type";
+import {TaskStatus} from "../../../domain/entities/task/task-status.type";
 
 export type CreatePrismaTask = {
     uuid: string;

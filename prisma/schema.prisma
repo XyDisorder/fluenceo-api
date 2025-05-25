@@ -24,3 +24,15 @@ model Task {
     modifiedAt DateTime @updatedAt
     dueDate   DateTime?
 }
+
+model User {
+    uuid        String   @id @default(uuid())
+    firstName String
+    lastName String
+    pseudo String
+    email String
+    password String
+    profilePictureUrl String
+    createdAt DateTime @default(now())
+    modifiedAt DateTime @updatedAt
+}

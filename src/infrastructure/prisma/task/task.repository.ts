@@ -1,11 +1,11 @@
 import {Injectable} from "@nestjs/common";
-import {PrismaService} from "../../../prisma/prisma.service";
-import {CreatableTaskInput, GetTaskOutput, UpdatableTask} from "../../domain/entities/task/task.type";
+import {PrismaService} from "../../../../prisma/prisma.service";
+import {CreatableTaskInput, GetTaskOutput, UpdatableTask} from "../../../domain/entities/task/task.type";
 import {randomUUID} from "crypto";
-import { TaskStatusDefault} from "../../domain/entities/task/task-status.type";
+import { TaskStatusDefault} from "../../../domain/entities/task/task-status.type";
 import {CreatePrismaTask, UpdatePrismaTask} from "./task-prisma.type";
-import {TaskPort} from "../../domain/port/task.port";
-import {Task} from "../../domain/entities/task/task.entity";
+import {TaskPort} from "../../../domain/port/task.port";
+import {Task} from "../../../domain/entities/task/task.entity";
 
 @Injectable()
 export class PrismaTaskRepository implements TaskPort {

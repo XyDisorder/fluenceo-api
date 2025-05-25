@@ -1,6 +1,6 @@
-import {Injectable} from "@nestjs/common";
+import { Injectable, Param} from "@nestjs/common";
 import {UserPort} from "../../../domain/port/user.port";
-import {CreatableUser, UpdatableUser} from "../../../domain/entities/user/user.type";
+import {CreatableUser, GetableUser, UpdatableUser} from "../../../domain/entities/user/user.type";
 import {PrismaService} from "../../../../prisma/prisma.service";
 import {CreatePrismaUser, UpdatePrismaUser} from "./user-prisma.type";
 import {randomUUID} from "crypto";
@@ -10,8 +10,18 @@ import {User} from "../../../domain/entities/user/user.entity";
 export class PrismaUserRepository implements UserPort {
     constructor(private readonly prisma: PrismaService) {}
 
+    async findByUuid(@Param() uuid: User['uuid']): Promise<GetableUser> {
+        return await this.prisma.user.findUnique({
+            where: {uuid}
+        }) as GetableUser;
+    }
 
-    async createUser(user: CreatableUser): Promise<void> {
+    async findAll(): Promise<GetableUser[]> {
+        const rows = await this.prisma.user.findMany();
+        return rows as GetableUser[];
+    }
+
+    async create(user: CreatableUser): Promise<void> {
         const data: CreatePrismaUser = {
             uuid: randomUUID() as string,
             firstName: user.firstName,
@@ -26,11 +36,12 @@ export class PrismaUserRepository implements UserPort {
         await this.prisma.user.create({ data });
     }
 
-    async updateUser(uuid: User['uuid'], user: UpdatableUser): Promise<void> {
+    async updateByUuid(uuid: User['uuid'], user: UpdatableUser): Promise<void> {
         const updatableUser : UpdatePrismaUser = user;
         await this.prisma.user.update({
             where: { uuid },
             data : updatableUser,
         })
     }
+
 }

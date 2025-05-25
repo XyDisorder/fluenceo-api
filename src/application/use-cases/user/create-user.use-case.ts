@@ -7,6 +7,6 @@ export class CreateUserUseCase {
     constructor(private readonly userPort: UserPort) {}
 
     async execute(user: CreatableUser) {
-         await this.userPort.createUser(user);
+         await this.userPort.create(user);
     }
 }

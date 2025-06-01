@@ -20,7 +20,7 @@ export class RegisterDto {
 
     @IsString()
     @IsOptional()
-    profilePictureUrl: string
+    profilePictureUrl?: string
 
     @IsString()
     @IsNotEmpty()

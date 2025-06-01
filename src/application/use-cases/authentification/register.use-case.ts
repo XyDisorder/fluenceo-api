@@ -61,4 +61,24 @@ export class RegisterUseCase {
             await this.userPort.markEmailAsVerified(user.uuid);
             return { message: 'Email successfully verified' };
      }
+
+     async resendConfirmationEmail(email: string): Promise<void> {
+            if (!email) {
+                throw new HttpException('Email is required to resend confirmation email', HttpStatus.BAD_REQUEST);
+            }
+
+            const user = await this.userPort.findByEmail(email);
+            if (!user) {
+                throw new HttpException('User not found', HttpStatus.NOT_FOUND);
+            }
+
+            if (user.isActive) {
+                throw new HttpException('Email already verified', HttpStatus.BAD_REQUEST);
+            }
+
+            const token = RegisterValidationHelper.generateJwtEmailToken(user, this.jwtService);
+            await this.userPort.updateEmailVerificationToken(user.uuid, token);
+
+            await this.emailPort.sendConfirmationEmail(user.email, token);
+     }
 }

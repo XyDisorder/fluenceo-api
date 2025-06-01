@@ -6,6 +6,6 @@ export const mapRegisterUserDtoToProps = (dto: RegisterDto): RegistableUser => (
     lastName: dto.lastName,
     password: dto.password,
     email: dto.email,
-    profilePictureUrl: dto.profilePictureUrl,
+    profilePictureUrl: dto.profilePictureUrl ?? '',
     pseudo: dto.pseudo
 });

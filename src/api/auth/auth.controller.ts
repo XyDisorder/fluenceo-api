@@ -1,9 +1,9 @@
-import {Body, Controller, Get, Post, Query} from "@nestjs/common";
+import {Body, Controller, Get, Post, Query, Redirect, Res} from "@nestjs/common";
 import { LoginDto } from "./dto/login.dto";
 import { RegisterDto } from "./dto/register.dto";
 import { LoginUseCase } from "../../application/use-cases/authentification/login.use-case";
 import { RegisterUseCase } from "../../application/use-cases/authentification/register.use-case";
-import { GetableUser } from "../../domain/entities/user/user.type";
+import {GetableLoginUser, GetableUser} from "../../domain/entities/user/user.type";
 import { mapRegisterUserDtoToProps } from "./mapper/auth.mapper";
 import {User} from "../../domain/entities/user/user.entity";
 
@@ -13,7 +13,8 @@ export class AuthController {
                 private readonly registerUseCase: RegisterUseCase) {}
 
     @Post('login')
-    async signIn(@Body() body: LoginDto) {
+    async signIn(@Body() body: LoginDto): Promise<string> {
+        console.log('signIn called with body:', body);
         const {email, password} = body;
         return this.loginUseCase.execute(email, password);
     }
@@ -25,7 +26,21 @@ export class AuthController {
     }
 
     @Get('confirm-email')
-    async confirmEmail(@Query('token') token: User['emailVerificationToken']): Promise<{ message: string }> {
-        return await this.registerUseCase.confirmEmail(token);
+    @Redirect()
+    async confirmEmail(@Query('token') token: User['emailVerificationToken']): Promise<{ url: string } | void> {
+        const success = await this.registerUseCase.confirmEmail(token);
+        if (success) {
+            return { url: `${process.env.FRONTEND_URL}/email-verified?status=success` };
+        } else {
+            return { url: `${process.env.FRONTEND_URL}/email-verified?status=failed` };
+        }
+    }
+
+    @Post('resent-confirmation-email')
+    async resendConfirmationEmail(@Body('email') email: string): Promise<void> {
+        if (!email) {
+            throw new Error('Email is required to resend confirmation email');
+        }
+        await this.registerUseCase.resendConfirmationEmail(email);
     }
 }

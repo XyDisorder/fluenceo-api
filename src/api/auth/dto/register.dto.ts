@@ -1,9 +1,9 @@
-import {IsNotEmpty, IsString} from "class-validator";
+import {IsEmail, IsNotEmpty, IsOptional, IsString} from "class-validator";
 
-
-export class CreateUserDto {
+export class RegisterDto {
     @IsString()
     @IsNotEmpty()
+    @IsEmail({}, { message: 'Invalid email format' })
     email: string
 
     @IsString()
@@ -19,7 +19,7 @@ export class CreateUserDto {
     password: string
 
     @IsString()
-    @IsNotEmpty()
+    @IsOptional()
     profilePictureUrl: string
 
     @IsString()

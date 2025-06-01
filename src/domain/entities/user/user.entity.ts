@@ -8,6 +8,8 @@ export class User {
         public profilePictureUrl: string,
         public pseudo: string,
         public readonly createdAt: Date = new Date(),
+        public readonly isActive: boolean = true,
+        public emailVerificationToken?: string,
         public modifiedAt: Date = new Date(),
     ) {}
 }

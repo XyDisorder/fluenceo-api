@@ -1,10 +1,11 @@
 import { Injectable, Param} from "@nestjs/common";
 import {UserPort} from "../../../domain/port/user.port";
-import {CreatableUser, GetableUser, UpdatableUser} from "../../../domain/entities/user/user.type";
+import { GetableLoginUser, GetableUser, UpdatableUser} from "../../../domain/entities/user/user.type";
 import {PrismaService} from "../../../../prisma/prisma.service";
 import {CreatePrismaUser, UpdatePrismaUser} from "./user-prisma.type";
 import {randomUUID} from "crypto";
 import {User} from "../../../domain/entities/user/user.entity";
+import {RegistableUser} from "../../../domain/entities/auth/auth.type";
 
 @Injectable()
 export class PrismaUserRepository implements UserPort {
@@ -12,7 +13,7 @@ export class PrismaUserRepository implements UserPort {
 
     async findByUuid(@Param() uuid: User['uuid']): Promise<GetableUser> {
         return await this.prisma.user.findUnique({
-            where: {uuid}
+            where: { uuid }
         }) as GetableUser;
     }
 
@@ -21,7 +22,7 @@ export class PrismaUserRepository implements UserPort {
         return rows as GetableUser[];
     }
 
-    async create(user: CreatableUser): Promise<void> {
+    async create(user: RegistableUser): Promise<GetableUser> {
         const data: CreatePrismaUser = {
             uuid: randomUUID() as string,
             firstName: user.firstName,
@@ -33,7 +34,7 @@ export class PrismaUserRepository implements UserPort {
             createdAt: new Date(),
             modifiedAt: new Date()
         }
-        await this.prisma.user.create({ data });
+       return await this.prisma.user.create({ data }) as GetableUser;
     }
 
     async updateByUuid(uuid: User['uuid'], user: UpdatableUser): Promise<void> {
@@ -44,4 +45,29 @@ export class PrismaUserRepository implements UserPort {
         })
     }
 
+    async findByEmail(email: User['email']): Promise<GetableLoginUser | null> {
+        return await this.prisma.user.findUnique({
+            where: { email }
+        });
+    }
+
+    async findByPseudo(pseudo: User['pseudo']): Promise<GetableLoginUser | null> {
+        return await this.prisma.user.findUnique({
+            where: { pseudo }
+        });
+    }
+
+    async updateEmailVerificationToken(uuid: User['uuid'], emailVerificationToken: string): Promise<void> {
+        await this.prisma.user.update({
+            where: { uuid },
+            data: { emailVerificationToken }
+        });
+    }
+
+    async markEmailAsVerified(uuid: User['uuid']): Promise<void> {
+        await this.prisma.user.update({
+            where: { uuid },
+            data: { isActive: true, emailVerificationToken: null }
+        });
+    }
 }

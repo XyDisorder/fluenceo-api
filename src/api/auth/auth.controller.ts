@@ -13,7 +13,7 @@ export class AuthController {
                 private readonly registerUseCase: RegisterUseCase) {}
 
     @Post('login')
-    async signIn(@Body() body: LoginDto): Promise<string> {
+    async signIn(@Body() body: LoginDto): Promise<{token: string, user: GetableLoginUser}> {
         console.log('signIn called with body:', body);
         const {email, password} = body;
         return this.loginUseCase.execute(email, password);
